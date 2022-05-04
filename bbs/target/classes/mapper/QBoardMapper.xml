@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 자바소스의 BoardMapper의 경로 적용 -->
+<mapper namespace="com.myapp.bbs.dao.QBoardMapper">
+
+    <!-- 검색 조건문 where절에 각각의 type이 있으면 추가해준다. -->
+    <sql id="criteria">
+        <trim prefix="where (" suffix=")" prefixOverrides="OR">
+            <foreach collection="typeArr" item="type">
+                <trim prefix="OR">
+                    <choose>
+                        <when test="type == 'T'.toString()">
+                            title like concat('%',#{keyword},'%') 
+                        </when>
+                        <when test="type == 'C'.toString()">
+                            content like concat('%',#{keyword},'%') 
+                        </when>
+                        <when test="type == 'W'.toString()">
+                            writer like concat('%',#{keyword},'%' )
+                        </when>
+                    </choose>
+                </trim>
+            </foreach>
+        </trim>  
+    </sql>
+
+
+
+
+	<!-- 게시판 등록 -->
+	<select id="enroll" resultType="QBoardVO">
+	
+		insert into qboard(title, content, writer) 
+		values (#{title}, #{content}, #{writer})
+		
+	</select>
+	
+	<!-- 게시판 목록 -->
+	<select id="getList" resultType="QBoardVO">
+	
+		select * from qboard
+	
+	</select>
+	
+    <!-- 게시물 목록(페이징) : skip, amount는 Criteria 객체에서 입력됨 -->
+    <select id="getListPaging" resultType="QBoardVO">
+    
+        select * from (
+                select qbno, title, writer, regdate, updatedate  
+                from qboard 
+                
+                <if test="keyword != null">
+                	<include refid="criteria"></include>              
+                </if>
+                
+                order by qbno desc
+                )  as T2
+        limit #{skip}, #{amount}
+    
+    </select>	
+    
+    <!-- 게시물 총 개숫 -->
+    <select id="getTotal" resultType="int">
+    
+        select count(*) from qboard
+        
+        <if test="keyword != null">
+        	<include refid="criteria"></include>                
+        </if>              
+    
+    </select>
+	
+	
+	<!-- 게시판 조회 -->
+	<select id="getPage" resultType="QBoardVO">
+	
+		select * from qboard where qbno = #{qbno}
+	
+	</select>
+	
+	<!-- 게시판 수정 -->
+    <update id="modify">
+    
+        update qboard set title = #{title}, content = #{content}, updatedate = now() 
+        where qbno = #{qbno}
+        
+    </update>
+    
+    <!-- 게시판 삭제 -->
+    <delete id="delete">
+    
+        delete from qboard where qbno = #{qbno}
+    
+    </delete>
+    
+
+	
+	
+</mapper>

@@ -1,0 +1,31 @@
+<aside th:fragment="어사이드" class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-1 fixed-start ms-3 bg-gradient-dark" id="sidenav-main">
+  <div class="sidenav-header">
+    <a class="navbar-brand m-0"  th:href="@{/home}" />
+      <span class="ms-1 font-weight-bold text-white">갤러리</span>
+    </a>
+    
+  </div>
+  <hr class="horizontal light mt-0 mb-2" />
+  <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link text-white" th:href="@{/board/list}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">table_view</i>
+          </div> 
+          <span class="nav-link-text ms-1">자유 게시판</span>            
+        </a>
+        <li class="nav-item">
+        <a class="nav-link text-white" th:href="@{/qboard/list}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">table_view</i>
+          </div> 
+          <span class="nav-link-text ms-1">질문 게시판</span>            
+        </a>
+        </li>
+
+ 
+
+    </ul>
+  </div>
+</aside>
